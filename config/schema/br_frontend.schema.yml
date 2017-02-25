@@ -1,0 +1,14 @@
+# Add schema for our extra field settings.
+field.formatter.settings.br_frontend_multi_image_url:
+  type: mapping
+  label: 'Image field display format settings'
+  mapping:
+    image_style_0:
+      type: string
+      label: 'Image style 1'
+    image_style_1:
+      type: string
+      label: 'Image style 2'
+    image_style_2:
+      type: string
+      label: 'Image style 3'

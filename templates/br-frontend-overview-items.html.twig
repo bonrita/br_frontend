@@ -1,0 +1,37 @@
+{# Source: overview-details.html 2016-10-24 15:40:14 #}
+{# Source: articles-overview.html 2016-11-16 14:44:51 #}
+
+{#
+ This template or html is detached from the rest of the template because it will be the html
+ to be returned when an ajax call is done on the module in context.
+#}
+
+{% if content_type == 'article_standard' %}
+  <div class="content-wrapper">
+    <p class="overview-item-count">{{ total_item_text }}</p>
+  </div>
+{% endif %}
+
+{% if content_type == 'news' %}
+  {% set class = 'overview-details-list' %}
+  <div class="content-wrapper">
+{% elseif content_type == 'article_standard' %}
+  {% set class = 'overview-items-list' %}
+{% elseif content_type == 'press_release' %}
+  {% set class = 'overview-details-list' %}
+  <div class="content-wrapper">
+{% else %}
+  {% set class = '' %}
+{% endif %}
+
+  <ul class="{{ class }}">
+    {% for item in items %}
+      {{ item }}
+    {% endfor %}
+  </ul>
+
+{% if content_type == 'news' %}
+  </div>
+{% elseif content_type == 'press_release' %}
+  </div>
+{% endif %}

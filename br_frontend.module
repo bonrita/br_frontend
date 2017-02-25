@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * Hook implementations for br_frontend module.
+ */
+use Drupal\Component\Utility\Unicode;
+use Drupal\editor\Entity\Editor;
+use Drupal\Core\Language\LanguageInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function br_frontend_theme() {
+  return array(
+    'br_frontend_link_url' => array(
+      'variables' => array('title' => NULL, 'url' => NULL),
+    ),
+    'br_frontend_image_url' => array(
+      'variables' => array(
+        'item' => NULL,
+        'image_style' => NULL,
+        'url' => NULL
+      ),
+    ),
+    'br_frontend_overview_items' => array(
+      'variables' => array('items' => NULL, 'content_type' => NULL, 'total_item_text' => NULL),
+    ),
+    'br_frontend_empty_result' => array(
+      'variables' => array('message' => NULL,),
+    ),
+  );
+}
+
+/**
+ * Prepares variables for Image URL formatter templates.
+ *
+ * Default template: br-frontend-image-url.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - item: An ImageItem object.
+ *   - image_style: An optional image style.
+ *   - url: The URL to the (styled) image.
+ */
+function template_preprocess_br_frontend_image_url(&$variables) {
+
+  $item = $variables['item'];
+
+  // Do not output an empty 'title' attribute.
+  if (Unicode::strlen($item->title) != 0) {
+    $variables['title'] = $item->title;
+  }
+
+  foreach (array('width', 'height', 'alt') as $key) {
+    $variables[$key] = $item->$key;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Handles the form alter for the search_api_page_block_form forms.
+ */
+function br_frontend_form_search_api_page_block_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+  $form['keys']['#title'] = t('Search the site');
+  unset($form['keys']['#title_display']);
+
+  $form['keys']['#attributes'] = [
+    'title' => t('Type key words...'),
+    'type' => 'search',
+    'id' => 'searchField',
+    'class' => ['input'],
+    'placeholder' => t('Type keywords') . ' ...',
+  ];
+
+  $form['actions']['submit']['#value'] = t('Go');
+  $form['actions']['submit']['#prefix'] = '<div class="button button-cta is-default">';
+  $form['actions']['submit']['#suffix'] = '</div>';
+}
+
+/**
+ * Analyse the query string.
+ *
+ * @param string $str
+ *   Query string.
+ *
+ * @return array
+ *   The query parameters.
+ */
+function br_frontend_parse_query_str($str) {
+  # result array
+  $arr = array();
+
+  # split on outer delimiter
+  $pairs = explode('&', $str);
+
+  # loop through each pair
+  foreach ($pairs as $i) {
+    # split into name and value
+    list($name, $value) = explode('=', $i, 2);
+
+    # if name already exists
+    if (isset($arr[$name])) {
+      # stick multiple values into an array
+      if (is_array($arr[$name])) {
+        $arr[$name][] = $value;
+      }
+      else {
+        $arr[$name] = array($arr[$name], $value);
+      }
+    }
+    # otherwise, simply stick it in a scalar
+    else {
+      $arr[$name] = $value;
+    }
+  }
+
+  return $arr;
+}
+
+/**
+ * Implements hook_ckeditor_css_alter().
+ */
+function br_frontend_ckeditor_css_alter(array &$css, Editor $editor) {
+
+  // Add language direction dependent css styles.
+  $current_language = \Drupal::languageManager()->getCurrentLanguage();
+
+  if ($current_language->getDirection() == LanguageInterface::DIRECTION_LTR) {
+    $css[] = drupal_get_path('theme', 'br_global') . '/build/editor-ltr.css';
+  }
+  else {
+    $css[] = drupal_get_path('theme', 'br_global') . '/build/editor-rtl.css';
+  }
+}

@@ -1,0 +1,27 @@
+br_frontend.f06overview:
+  path: '/f06_overview'
+  defaults:
+    _controller: 'Drupal\br_frontend\Controller\F06OverviewController::getData'
+  requirements:
+    _permission: 'access content'
+
+br_frontend.f07overview:
+  path: '/f07_overview'
+  defaults:
+    _controller: 'Drupal\br_frontend\Controller\F07OverviewController::getData'
+  requirements:
+    _permission: 'access content'
+
+br_frontend.f02overview:
+  path: '/f02_overview'
+  defaults:
+    _controller: 'Drupal\br_frontend\Controller\F02OverviewController::getData'
+  requirements:
+    _permission: 'access content'
+
+br_frontend.site_wide_search:
+  path: '/site_wide_search'
+  defaults:
+    _controller: 'Drupal\br_frontend\Controller\SiteWideSearchController::search'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,5 @@
+name: Br Frontend
+type: module
+description: Helpers for Br Frontend
+core: 8.x
+package: Custom

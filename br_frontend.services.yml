@@ -1,0 +1,24 @@
+services:
+  br_frontend.f02overview:
+    class: Drupal\br_frontend\F02OverviewService
+    arguments: ["@entity_type.manager", "@language_manager", "@current_user", "@request_stack", "@br_ips.industry_manager", "@br_country.current", "@cache.default"]
+  br_frontend.f06overview:
+    class: Drupal\br_frontend\F06OverviewService
+    arguments: ["@entity_type.manager", "@language_manager", "@current_user", "@request_stack", "@br_ips.industry_manager", "@br_country.current"]
+  br_frontend.f07overview:
+    class: Drupal\br_frontend\F07OverviewService
+    arguments: ["@entity_type.manager", "@language_manager", "@current_user", "@request_stack", "@br_ips.industry_manager", "@br_country.current"]
+  br_frontend.breadcrumb:
+    class: Drupal\br_frontend\PathBasedBreadcrumbBuilder
+    arguments: ['@router.request_context', '@access_manager', '@router', '@path_processor_manager', '@config.factory',  '@title_resolver', '@current_user', '@path.current', '@language_manager', '@br_country.current', '@entity_type.manager', '@menu.active_trail', '@br_ips.industry_manager']
+    tags:
+      - { name: breadcrumb_builder, priority: 1 }
+
+  br_frontend.twig.extension:
+    class: Drupal\br_frontend\Twig\Extension\BrFrontendExtension
+    tags:
+      - { name: twig.extension }
+
+  br_frontend.cookie_acceptance:
+    class: Drupal\br_frontend\CookieAcceptanceService
+    arguments: ["@entity.query", "@br_country.current", "@language_manager"]

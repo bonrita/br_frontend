@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a link broken down in title and URL.
+ *
+ * Available variables:
+ *   - item: An ImageItem object.
+ *   - image_style: An optional image style.
+ *   - url: The image URL
+ *   - alt: The image alt tag
+ *   - title: (optional) The image title tag
+ *   - width: The image width tag
+ *   - height: The image height tag
+ *
+ * @see template_preprocess()
+ *
+ * @ingroup themeable
+ */
+#}
+{% spaceless %}
+  {{ url }}
+{% endspaceless %}
